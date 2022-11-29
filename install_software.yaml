@@ -1,0 +1,37 @@
+---
+- name: Instalación de productos en Windows 10
+  hosts: windows
+  vars:
+    iis_test_message: Hola
+    ambiente: Desarrollo
+  tasks:
+
+  - name: Crear la carpeta de configuracion
+    win_file:
+      path: C:\ansible_example\
+      state: directory
+
+  - name: Copiar los archivos de configuracion
+    win_copy:
+      content: "{{ iis_test_message }}"
+      dest: C:\ansible_example\index.html
+
+  - name: Crear un archivo desde plantilla jinja
+    win_template:
+      src: file.conf.j2
+      dest: C:\ansible_example\file.conf
+
+
+  - name: Mostrar la direccion del servidor
+    debug:
+      msg: "http://{{ ansible_host }}"
+
+  - name: Download the Apache installer
+    win_get_url:
+      url: https://archive.apache.org/dist/httpd/binaries/win32/httpd-2.2.25-win32-x86-no_ssl.msi
+      dest: C:\ansible_example\httpd-2.2.25-win32-x86-no_ssl.msi
+
+  - name: Install MSI
+    win_package:
+      path: C:\ansible_example\httpd-2.2.25-win32-x86-no_ssl.msi
+      state: present

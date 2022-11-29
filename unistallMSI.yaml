@@ -1,0 +1,9 @@
+---
+- name: Desinstalar apache
+  hosts: windows
+  tasks:    
+  - name: Uninstall MSI
+    win_package:
+      path: C:\ansible_example\httpd-2.2.25-win32-x86-no_ssl.msi
+      state: absent  
+      
